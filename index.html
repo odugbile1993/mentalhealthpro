@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Support App</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to CSS -->
+</head>
+
+<body>
+    <header>
+        <h1>Mental Health Support App</h1>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <section id="resources" class="section">
+            <h2>Resources</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>Mental Health Articles</h3>
+                    <p>Explore insightful articles on maintaining mental wellness.</p>
+                    <a href="#">Read More</a>
+                </div>
+                <div class="card">
+                    <h3>Self-Care Tips</h3>
+                    <p>Find practical tips to take care of your mental health daily.</p>
+                    <a href="#">Read More</a>
+                </div>
+                <div class="card">
+                    <h3>Support Groups</h3>
+                    <p>Join support groups and connect with others for shared experiences.</p>
+                    <a href="#">Join Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Self-Assessment Quiz Section -->
+        <section id="quiz" class="section">
+            <h2>Self-Assessment Quiz</h2>
+            <button id="toggle-quiz" aria-expanded="false">Start Quiz</button>
+            <div id="quiz-container" style="display:none;">
+                <form id="quiz-form">
+                    <label for="question1">1. How often do you feel anxious?</label>
+                    <select id="question1" required>
+                        <option value="0">Never</option>
+                        <option value="1">Sometimes</option>
+                        <option value="2">Often</option>
+                        <option value="3">Always</option>
+                    </select>
+
+                    <label for="question2">2. Do you have trouble sleeping?</label>
+                    <select id="question2" required>
+                        <option value="0">Never</option>
+                        <option value="1">Sometimes</option>
+                        <option value="2">Often</option>
+                        <option value="3">Always</option>
+                    </select>
+
+                    <label for="question3">3. How often do you feel overwhelmed by stress?</label>
+                    <select id="question3" required>
+                        <option value="0">Never</option>
+                        <option value="1">Sometimes</option>
+                        <option value="2">Often</option>
+                        <option value="3">Always</option>
+                    </select>
+
+                    <label for="question4">4. Do you find it hard to concentrate on tasks?</label>
+                    <select id="question4" required>
+                        <option value="0">Never</option>
+                        <option value="1">Sometimes</option>
+                        <option value="2">Often</option>
+                        <option value="3">Always</option>
+                    </select>
+
+                    <label for="question5">5. Have you lost interest in activities you used to enjoy?</label>
+                    <select id="question5" required>
+                        <option value="0">Never</option>
+                        <option value="1">Sometimes</option>
+                        <option value="2">Often</option>
+                        <option value="3">Always</option>
+                    </select>
+
+                    <button type="button" onclick="submitQuiz()">Submit</button>
+                </form>
+                <div id="quiz-results"></div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="section">
+            <h2>Frequently Asked Questions</h2>
+            <ul>
+                <li><strong>Q: What should I do if I need immediate help?</strong>
+                    <p>A: If you are in crisis, please contact emergency services or a mental health professional.</p>
+                </li>
+                <li><strong>Q: How can I access the resources provided?</strong>
+                    <p>A: Click on the respective resource links, and they will direct you to additional information.</p>
+                </li>
+                <li><strong>Q: Is the self-assessment quiz confidential?</strong>
+                    <p>A: Yes, your responses are confidential and are used solely for personal reflection.</p>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Emergency Contact Section -->
+        <section id="contact" class="section">
+            <h2>Emergency Contact Information</h2>
+            <p>If you are in need of immediate assistance, please contact:</p>
+            <ul>
+                <li>National Suicide Prevention Lifeline: <a href="tel:1-800-273-8255">1-800-273-8255</a></li>
+                <li>Crisis Text Line: Text "HELLO" to <a href="tel:741741">741741</a></li>
+                <li>Your Local Emergency Services: <a href="tel:911">911</a></li>
+            </ul>
+        </section>
+
+       <!-- Expert Registration Section -->
+<section id="expert-registration" class="section">
+    <h2>Register as an Expert</h2>
+    <form id="expertForm">
+        <input type="text" name="name" placeholder="Name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="text" name="field_of_expertise" placeholder="Field of Expertise" required />
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="message" style="display: none;"></div> <!-- Message display area -->
+
+    <script>
+        document.getElementById('expertForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const formData = new FormData(this); // Get form data
+            const data = Object.fromEntries(formData.entries()); // Convert FormData to an object
+
+            fetch('http://localhost:3300/submit-expert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data), // Send form data as JSON
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Submission failed');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Display success message
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.textContent = data.message; // Use the message from the server
+                    messageDiv.style.display = 'block'; // Show the message
+                    messageDiv.style.color = 'green'; // Style it as green
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Display error message
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.textContent = 'Error: ' + error.message;
+                    messageDiv.style.display = 'block'; // Show the message
+                    messageDiv.style.color = 'red'; // Style it as red
+                });
+        });
+    </script>
+</section>
+
+<!-- Request Services Section -->
+<section id="request-service" class="section">
+    <h2>Request Services</h2>
+    <form id="service-request-form">
+        <input type="text" name="name" placeholder="Name" required />
+        <input type="text" name="address" placeholder="Address" required />
+        <input type="text" name="phone_number" placeholder="Phone Number" required />
+        <select name="service_type" required>
+            <option value="">Select a service...</option>
+            <option value="counseling">Counseling</option>
+            <option value="support-group">Support Group</option>
+            <option value="workshop">Workshop</option>
+        </select>
+        <textarea name="service_details" rows="4" placeholder="Details" required></textarea>
+        <button type="submit">Request</button>
+    </form>
+
+    <div id="service-message" style="display: none;"></div> <!-- Message display area -->
+
+    <script>
+        document.getElementById('service-request-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const formData = new FormData(this); // Get form data
+            const data = Object.fromEntries(formData.entries()); // Convert FormData to an object
+
+            fetch('http://localhost:3300/submit-service', {  // Corrected URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data), // Send form data as JSON
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Submission failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display success message
+                const messageDiv = document.getElementById('service-message');
+                messageDiv.textContent = data.message; // Use the message from the server
+                messageDiv.style.display = 'block'; // Show the message
+                messageDiv.style.color = 'green'; // Style it as green
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Display error message
+                const messageDiv = document.getElementById('service-message');
+                messageDiv.textContent = 'Error: ' + error.message;
+                messageDiv.style.display = 'block'; // Show the message
+                messageDiv.style.color = 'red'; // Style it as red
+            });
+        });
+    </script>
+</section>
+
+ 
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Mental Health Support App. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Toggle quiz visibility
+        document.getElementById('toggle-quiz').addEventListener('click', function () {
+            const quizContainer = document.getElementById('quiz-container');
+            const expanded = this.getAttribute('aria-expanded') === 'true';
+
+            this.setAttribute('aria-expanded', !expanded);
+            quizContainer.style.display = expanded ? 'none' : 'block';
+            this.textContent = expanded ? 'Start Quiz' : 'Hide Quiz';
+        });
+
+        // Function to submit quiz
+        function submitQuiz() {
+            const results = {
+                question1: document.getElementById('question1').value,
+                question2: document.getElementById('question2').value,
+                question3: document.getElementById('question3').value,
+                question4: document.getElementById('question4').value,
+                question5: document.getElementById('question5').value,
+            };
+
+            // Perform any processing or analysis with the quiz results here
+            const score = Object.values(results).reduce((sum, value) => sum + parseInt(value), 0);
+            document.getElementById('quiz-results').textContent = `Your score is: ${score}`;
+        }
+    </script>
+</body>
+
+</html>
